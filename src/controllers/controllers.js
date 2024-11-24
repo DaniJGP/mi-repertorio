@@ -22,10 +22,24 @@ const handleEliminarCancion = async (req, res) => {
     const id = req.params.id;
     console.log(id, typeof id);
     const oldRepertorio = JSON.parse(data);
-    console.log(oldRepertorio)
-    const newRepertorio = oldRepertorio.filter((c) => c.id != id)
-    console.log(newRepertorio);
+    const newRepertorio = oldRepertorio.filter((c) => c.id != id);
     fs.writeFile(db, JSON.stringify(newRepertorio, null, 4));
 };
 
-module.exports = { handleGetData, handleNuevaCancion, handleEliminarCancion };
+const handleEditarCancion = async (req, res) => {
+    const data = await fs.readFile(db, 'utf-8');
+    const { id, titulo, artista, tono } = req.body;
+    const repertorio = JSON.parse(data);
+    const index = repertorio.findIndex((cancion) => cancion.id == id);
+    repertorio[index].titulo = titulo;
+    repertorio[index].artista = artista;
+    repertorio[index].tono = tono;
+    fs.writeFile(db, JSON.stringify(repertorio, null, 4));
+};
+
+module.exports = {
+    handleGetData,
+    handleNuevaCancion,
+    handleEliminarCancion,
+    handleEditarCancion,
+};
