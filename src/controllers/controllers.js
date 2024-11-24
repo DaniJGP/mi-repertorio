@@ -18,8 +18,14 @@ const handleNuevaCancion = async (req, res) => {
 };
 
 const handleEliminarCancion = async (req, res) => {
-    const { id } = req.params;
-    console.log(id);
+    const data = await fs.readFile(db, 'utf-8');
+    const id = req.params.id;
+    console.log(id, typeof id);
+    const oldRepertorio = JSON.parse(data);
+    console.log(oldRepertorio)
+    const newRepertorio = oldRepertorio.filter((c) => c.id != id)
+    console.log(newRepertorio);
+    fs.writeFile(db, JSON.stringify(newRepertorio, null, 4));
 };
 
 module.exports = { handleGetData, handleNuevaCancion, handleEliminarCancion };
