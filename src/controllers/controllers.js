@@ -5,8 +5,7 @@ const db = path.join(__dirname, '../data/repertorio.json');
 const handleGetData = async (req, res) => {
     const data = await fs.readFile(db, 'utf-8');
     const canciones = JSON.parse(data);
-    res.send(canciones);
-    res.end;
+    return res.status(200).send(canciones);
 };
 
 const handleNuevaCancion = async (req, res) => {
@@ -24,6 +23,7 @@ const handleEliminarCancion = async (req, res) => {
     const oldRepertorio = JSON.parse(data);
     const newRepertorio = oldRepertorio.filter((c) => c.id != id);
     fs.writeFile(db, JSON.stringify(newRepertorio, null, 4));
+    return res.status(200).send('Canción eliminada correctamente');
 };
 
 const handleEditarCancion = async (req, res) => {
@@ -35,6 +35,7 @@ const handleEditarCancion = async (req, res) => {
     repertorio[index].artista = artista;
     repertorio[index].tono = tono;
     fs.writeFile(db, JSON.stringify(repertorio, null, 4));
+    return res.status(200).send('Canción editada correctamente');
 };
 
 module.exports = {
